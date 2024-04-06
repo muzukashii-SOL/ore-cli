@@ -21,7 +21,7 @@ use crate::Miner;
 
 const RPC_RETRIES: usize = 20;
 const GATEWAY_RETRIES: usize = 100;
-const CONFIRM_RETRIES: usize = 4;
+const CONFIRM_RETRIES: usize = 1;
 
 impl Miner {
     pub async fn send_and_confirm(
@@ -108,7 +108,7 @@ impl Miner {
                         return Ok(sig);
                     }
                     for _ in 0..CONFIRM_RETRIES {
-                        std::thread::sleep(Duration::from_millis(2000));
+                        std::thread::sleep(Duration::from_millis(1));
                         match client.get_signature_statuses(&sigs).await {
                             Ok(signature_statuses) => {
                                 println!("Confirms: {:?}", signature_statuses.value);
