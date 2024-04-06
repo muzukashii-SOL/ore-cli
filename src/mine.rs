@@ -95,7 +95,6 @@ impl Miner {
                         break;
                     }
                     Err(_err) => {
-                        println!("loop: {}");
                         break;
                     }
                 }
