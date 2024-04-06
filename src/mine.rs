@@ -87,7 +87,7 @@ impl Miner {
                     nonce,
                 );
                 match self
-                    .send_and_confirm(&[cu_limit_ix, cu_price_ix, ix_mine], false, true)
+                    .send_and_confirm(&[cu_limit_ix, cu_price_ix, ix_mine], false, false)
                     .await
                 {
                     Ok(sig) => {
