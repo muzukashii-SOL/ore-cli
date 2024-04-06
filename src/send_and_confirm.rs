@@ -166,7 +166,10 @@ impl Miner {
             tx.sign(&[&signer], hash);
             attempts += 1;
             if attempts > GATEWAY_RETRIES {
-                return Ok(sig);
+                return Err(ClientError {
+                    request: None,
+                    kind: ClientErrorKind::Custom("Max retries".into()),
+                });
             }
         }
     }
