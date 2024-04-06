@@ -20,7 +20,7 @@ use solana_transaction_status::{TransactionConfirmationStatus, UiTransactionEnco
 use crate::Miner;
 
 const RPC_RETRIES: usize = 1;
-const GATEWAY_RETRIES: usize = 4;
+const GATEWAY_RETRIES: usize = 25;
 const CONFIRM_RETRIES: usize = 1;
 
 impl Miner {
@@ -151,7 +151,7 @@ impl Miner {
             stdout.flush().ok();
 
             // Retry
-            std::thread::sleep(Duration::from_millis(1));
+            std::thread::sleep(Duration::from_millis(10));
             (hash, slot) = client
                 .get_latest_blockhash_with_commitment(CommitmentConfig::confirmed())
                 .await
@@ -166,6 +166,7 @@ impl Miner {
             tx.sign(&[&signer], hash);
             attempts += 1;
             if attempts > GATEWAY_RETRIES {
+                return Ok(sig);
                 return Err(ClientError {
                     request: None,
                     kind: ClientErrorKind::Custom("Max retries".into()),
